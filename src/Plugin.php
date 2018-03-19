@@ -4,6 +4,7 @@ namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Composer\Plugin\PluginInterface;
 use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 
 /**
@@ -11,7 +12,7 @@ use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin
+class Plugin implements PluginInterface
 {
     /**
      * Array with all commands classes that should be registered
