@@ -37,25 +37,25 @@ use Composer\Command\BaseCommand;
 class DummyCommand extends BaseCommand
 {
 
-    /**
-     * Here we can configure command name, options and arguments. 
+	/**
+	 * Here we can configure command name, options and arguments.
 	 * We using here Symfony Command syntax.
-     */
-    protected function configure()
-    {
-		
-    }
+	 */
+	protected function configure()
+	{
 
-    /**
-     * Execute command
-     *
-     * @param InputInterface $input     STDInput
-     * @param OutputInterface $output   SRDOutput
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-       
-    }
+	}
+
+	/**
+	 * Execute command
+	 *
+	 * @param InputInterface $input STDInput
+	 * @param OutputInterface $output SRDOutput
+	 */
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+
+	}
 
 }
 ```
