@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/github/license/imponeer/composer-custom-commands.svg?maxAge=2592000)](LICENSE)
  [![Build Status](https://travis-ci.org/imponeer/composer-custom-commands.svg?branch=master)](https://travis-ci.org/imponeer/composer-custom-commands) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/imponeer/composer-custom-commands/badges/quality-score.png)](https://scrutinizer-ci.com/g/imponeer/composer-custom-commands/) 
-![PHP from Packagist](https://img.shields.io/packagist/php-v/imponeer/composer-custom-commands.svg) 
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/imponeer/composer-custom-commands.svg)](https://php.net) 
 [![Packagist](https://img.shields.io/packagist/v/imponeer/composer-custom-commands.svg)](https://packagist.org/packages/imponeer/composer-custom-commands)
 
 # Composer Custom Commands
