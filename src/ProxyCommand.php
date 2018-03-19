@@ -5,6 +5,8 @@ namespace Imponeer\ComposerCustomCommands;
 use Composer\Command\BaseCommand;
 use Imponeer\ComposerCustomCommands\Exceptions\NotASymfonyCommandException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ProxyCommand extends BaseCommand
 {
