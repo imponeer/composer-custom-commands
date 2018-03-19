@@ -20,7 +20,7 @@ class CommandProvider implements CommandProviderCapability
     {
         $instances = array();
         foreach (Plugin::getCommandsClasses() as $class) {
-            $instances[] = new $class();
+			$instances[] = ProxyCommand::create($class);
         }
         return $instances;
     }

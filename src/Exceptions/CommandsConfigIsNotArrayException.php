@@ -1,6 +1,6 @@
 <?php
 
-namespace Imponeer\ComposerCustomCommands;
+namespace Imponeer\ComposerCustomCommands\Exceptions;
 
 /**
  * Exception trown when 'commands' is not an array in composer.json

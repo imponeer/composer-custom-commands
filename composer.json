@@ -19,5 +19,8 @@
     },
     "extra": {
         "class": "Imponeer\\ComposerCustomCommands\\Plugin"
+	},
+	"require-dev": {
+		"composer/composer": "^1.6"
     }
 }

@@ -4,6 +4,7 @@ namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 
 /**
  * Defines plugin
