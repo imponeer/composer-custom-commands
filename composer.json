@@ -1,0 +1,23 @@
+{
+    "name": "imponeer/composer-custom-commands",
+    "description": "Adds possibility to define console commands as composer commands with Symfony console component syntax",
+    "type": "composer-plugin",
+    "require": {
+        "composer-plugin-api": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raimondas Rimkevičius",
+            "email": "mekdrop@impresscms.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Imponeer\\ComposerCustomCommand\\": "src/"
+        }
+    },
+    "extra": {
+        "class": "Imponeer\\ComposerCustomCommands\\Plugin"
+    }
+}
