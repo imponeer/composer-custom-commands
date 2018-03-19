@@ -3,7 +3,8 @@
     "description": "Adds possibility to define console commands as composer commands with Symfony console component syntax",
     "type": "composer-plugin",
     "require": {
-        "composer-plugin-api": "^1.1"
+        "composer-plugin-api": "^1.1",
+		"php": ">=5.4"
     },
     "license": "MIT",
     "authors": [
