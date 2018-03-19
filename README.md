@@ -65,24 +65,24 @@ class DummyCommand extends BaseCommand
 This should look something like this:
 ```javascript
 {
-    "name": "my-project",
-    "description": "",
-    "type": "project",
-    "require": {
-        "imponeer/composer-custom-commands": "*"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "SomeBody SomeOne",
-            "email": "internet@is.ours.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "My\\": "src/"
-        }
-    },
+	"name": "my-project",
+	"description": "",
+	"type": "project",
+	"require": {
+		"imponeer/composer-custom-commands": "*"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "SomeBody SomeOne",
+			"email": "internet@is.ours.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"My\\": "src/"
+		}
+	},
 	"config": {
 		"commands": [
 			"My\\Commands\\DummyCommand"
