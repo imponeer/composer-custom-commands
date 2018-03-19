@@ -92,3 +92,9 @@ This should look something like this:
 ```
 
 ### 4. If you did everything correctly, you will be able to use new composer command that is embeded in your project.
+
+## How to contribute?
+
+If you want to add some functionality or fix bugs, you can fork, change and create pull request. If you not sure how this works, try [interactive GitHub tutorial](https://try.github.io).
+
+If you found any bug or have some questions, use [issues tab](https://github.com/imponeer/composer-custom-commands/issues) and write there your questions.
