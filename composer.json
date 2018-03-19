@@ -15,11 +15,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Imponeer\\ComposerCustomCommand\\": "src/"
+			"Imponeer\\ComposerCustomCommands\\": "src/"
         }
     },
     "extra": {
-        "class": "Imponeer\\ComposerCustomCommands\\Plugin"
+		"class": "\\Imponeer\\ComposerCustomCommands\\Plugin"
 	},
 	"require-dev": {
 		"composer/composer": "^1.6"
