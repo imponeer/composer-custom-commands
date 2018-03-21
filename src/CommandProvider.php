@@ -16,12 +16,8 @@ class CommandProvider implements CommandProviderCapability
      *
      * @return array
      */
-    public function getCommands()
-    {
-        $instances = array();
-        foreach (Plugin::getCommandsClasses() as $class) {
-			$instances[] = ProxyCommand::create($class);
-        }
-        return $instances;
+	public function getCommands()
+	{
+		return DataCache::getInstance()->read();
     }
 }

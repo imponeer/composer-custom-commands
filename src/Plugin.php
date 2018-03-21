@@ -3,34 +3,34 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Composer;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
+use Composer\Script\ScriptEvents;
 use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
+use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
 
 /**
  * Defines plugin
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin implements PluginInterface, Capable
+class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 {
-	/**
-	 * Array with all commands classes that should be registered
-	 *
-	 * @var array
-	 */
-	private static $commands_classes = array();
 
 	/**
-	 * Gets commands classes for reading outside class
+	 * Gets all subscribed events for plugin
 	 *
 	 * @return array
 	 */
-	public static function getCommandsClasses()
+	public static function getSubscribedEvents()
 	{
-		return self::$commands_classes;
+		return array(
+			ScriptEvents::POST_AUTOLOAD_DUMP => array('onPostAutoloadDump', 0)
+		);
 	}
 
 	/**
@@ -41,13 +41,7 @@ class Plugin implements PluginInterface, Capable
 	 */
 	public function activate(Composer $composer, IOInterface $io)
 	{
-		$extra = $composer->getPackage()->getExtra();
-		if (isset($extra['commands'])) {
-			if (!is_array($extra['commands'])) {
-				throw new CommandsConfigIsNotArrayException();
-			}
-			self::$commands_classes = $extra['commands'];
-		}
+
 	}
 
 	/**
@@ -58,7 +52,27 @@ class Plugin implements PluginInterface, Capable
 	public function getCapabilities()
 	{
 		return array(
-			CommandProvider::class => \Imponeer\ComposerCustomCommands\CommandProvider::class
+			CommandProvider::class => LocalCommandProvider::class
 		);
+	}
+
+	/**
+	 * Using post autodump event to create cached version of commands
+	 *
+	 * @param Event $event
+	 *
+	 * @throws CommandsConfigIsNotArrayException
+	 */
+	public function onPostAutoloadDump(Event $event)
+	{
+		$composer = $event->getComposer();
+		$extra = $composer->getPackage()->getExtra();
+		if (isset($extra['commands'])) {
+			if (!is_array($extra['commands'])) {
+				throw new CommandsConfigIsNotArrayException();
+			}
+			$event->getIO()->write('<info>Updating commands cache...</info>');
+			DataCache::getInstance()->write($extra['commands']);
+		}
 	}
 }
