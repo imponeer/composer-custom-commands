@@ -100,7 +100,7 @@ final class DataCache {
 	/**
 	 * Read commands data from cache
 	 *
-	 * @return ProxyCommand[]
+	 * @return string[]
 	 */
 	public function read() {
 		return file_exists($this->cache_file)?include($this->cache_file):array();
