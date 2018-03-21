@@ -106,7 +106,7 @@ final class DataCache
 	/**
 	 * Read commands data from cache
 	 *
-	 * @return array|mixed
+	 * @return ProxyCommand[]
 	 */
 	public function read()
 	{

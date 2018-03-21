@@ -73,7 +73,17 @@ class ProxyCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		$this->includeAutoloader();
+
 		return $this->command->execute($input, $output);
+	}
+
+	/**
+	 * Includes autoloader
+	 */
+	private function includeAutoloader()
+	{
+		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 	}
 
 }
