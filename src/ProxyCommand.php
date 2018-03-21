@@ -3,8 +3,6 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Command\BaseCommand;
-use Composer\Composer;
-use Imponeer\ComposerCustomCommands\Exceptions\NotASymfonyCommandException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,20 +20,12 @@ class ProxyCommand extends BaseCommand
 	/**
 	 * Creates new instance
 	 *
-	 * @param string $class Classname to create
-	 * @param Composer $composer Composer instance
+	 * @param Command $command Command instance
 	 *
 	 * @return ProxyCommand
 	 */
-	public static function create(Composer &$composer, $class)
+	public static function create(Command $command)
 	{
-		if (!class_exists($class)) {
-			var_dump($composer->getPackage());
-		}
-		$command = new $class();
-		if (!($command instanceof Command)) {
-			throw new NotASymfonyCommandException();
-		}
 		$instance = new self(
 			$command->getName()
 		);
