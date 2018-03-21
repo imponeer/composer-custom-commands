@@ -46,7 +46,7 @@ final class DataCache
 	{
 		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
-		$includes = $this->getReflectionClassesFromStrings($classes);
+		$includes = empty($classes) ? array() : $this->getReflectionClassesFromStrings($classes);
 
 		ob_start();
 		require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'commands.tpl.php';
