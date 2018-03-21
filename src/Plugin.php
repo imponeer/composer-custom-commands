@@ -3,34 +3,35 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Composer;
-use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
-use Composer\Script\Event;
-use Composer\Script\ScriptEvents;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
-use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 
 /**
  * Defines plugin
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin implements PluginInterface, Capable, EventSubscriberInterface
+class Plugin implements PluginInterface, Capable
 {
 
 	/**
-	 * Gets all subscribed events for plugin
+	 * Composer instance
 	 *
-	 * @return array
+	 * @var Composer
 	 */
-	public static function getSubscribedEvents()
+	protected static $composer;
+
+	/**
+	 * Gets composer instance
+	 *
+	 * @return Composer
+	 */
+	public static function getComposer()
 	{
-		return array(
-			ScriptEvents::POST_AUTOLOAD_DUMP => array('onPostAutoloadDump', 0)
-		);
+		return self::$composer;
 	}
 
 	/**
@@ -41,7 +42,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	 */
 	public function activate(Composer $composer, IOInterface $io)
 	{
-
+		$this->composer = $composer;
 	}
 
 	/**
@@ -54,22 +55,5 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 		return array(
 			CommandProvider::class => LocalCommandProvider::class
 		);
-	}
-
-	/**
-	 * Using post autodump event to create cached version of commands
-	 *
-	 * @param Event $event
-	 *
-	 * @throws CommandsConfigIsNotArrayException
-	 */
-	public function onPostAutoloadDump(Event $event)
-	{
-		$composer = $event->getComposer();
-		$extra = $composer->getPackage()->getExtra();
-		if (isset($extra['commands'])) {
-			$event->getIO()->write('<info>Updating commands cache</info>');
-			DataCache::getInstance()->write($extra['commands']);
-		}
 	}
 }
