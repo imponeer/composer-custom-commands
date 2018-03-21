@@ -102,8 +102,7 @@ final class DataCache {
 	 *
 	 * @return ProxyCommand[]
 	 */
-	public function read()
-	{
+	public function read() {
 		return file_exists($this->cache_file)?include($this->cache_file):array();
 	}
 
