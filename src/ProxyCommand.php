@@ -8,8 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProxyCommand extends BaseCommand
-{
+class ProxyCommand extends BaseCommand {
 
 	/**
 	 * Linked command
@@ -25,8 +24,7 @@ class ProxyCommand extends BaseCommand
 	 *
 	 * @return array
 	 */
-	public static function produce($classes)
-	{
+	public static function produce($classes) {
 		$ret = [];
 		foreach ($classes as $class) {
 			if (!class_exists($class)) {
@@ -46,8 +44,7 @@ class ProxyCommand extends BaseCommand
 	 *
 	 * @return ProxyCommand
 	 */
-	public static function create(Command $command)
-	{
+	public static function create(Command $command) {
 		$instance = new self(
 			$command->getName()
 		);
@@ -72,8 +69,7 @@ class ProxyCommand extends BaseCommand
 	 *
 	 * @return int|null
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
+	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		$composer = $this->getComposer();
 

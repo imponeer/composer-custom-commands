@@ -11,15 +11,15 @@ use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
  */
 class CommandProvider implements CommandProviderCapability
 {
-    /**
-     * Gets registered commands
-     *
-     * @return array
-     */
+	/**
+	 * Gets registered commands
+	 *
+	 * @return array
+	 */
 	public function getCommands()
 	{
 		return ProxyCommand::produce(
 			DataCache::getInstance()->read()
 		);
-    }
+	}
 }
