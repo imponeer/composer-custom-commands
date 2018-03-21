@@ -3,10 +3,14 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Composer;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
+use Composer\Script\ScriptEvents;
+use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
 
 /**
@@ -14,24 +18,19 @@ use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin implements PluginInterface, Capable
+class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 {
 
 	/**
-	 * Composer instance
+	 * Gets all subscribed events for plugin
 	 *
-	 * @var Composer
+	 * @return array
 	 */
-	protected static $composer;
-
-	/**
-	 * Gets composer instance
-	 *
-	 * @return Composer
-	 */
-	public static function getComposer()
+	public static function getSubscribedEvents()
 	{
-		return self::$composer;
+		return array(
+			ScriptEvents::POST_AUTOLOAD_DUMP => array('onPostAutoloadDump', 0)
+		);
 	}
 
 	/**
@@ -42,7 +41,7 @@ class Plugin implements PluginInterface, Capable
 	 */
 	public function activate(Composer $composer, IOInterface $io)
 	{
-		self::$composer = $composer;
+
 	}
 
 	/**
@@ -55,5 +54,22 @@ class Plugin implements PluginInterface, Capable
 		return array(
 			CommandProvider::class => LocalCommandProvider::class
 		);
+	}
+
+	/**
+	 * Using post autodump event to create cached version of commands
+	 *
+	 * @param Event $event
+	 *
+	 * @throws CommandsConfigIsNotArrayException
+	 */
+	public function onPostAutoloadDump(Event $event)
+	{
+		$composer = $event->getComposer();
+		$extra = $composer->getPackage()->getExtra();
+		if (isset($extra['commands'])) {
+			$event->getIO()->write('<info>Updating commands cache...</info>');
+			DataCache::getInstance()->write($extra['commands']);
+		}
 	}
 }
