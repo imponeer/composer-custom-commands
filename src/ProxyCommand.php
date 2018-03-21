@@ -28,7 +28,7 @@ class ProxyCommand extends BaseCommand
 	{
 		$ret = [];
 		foreach ($classes as $class) {
-			if (!class_exists($classes)) {
+			if (!class_exists($class)) {
 				continue;
 			}
 			$ret[] = self::create(
