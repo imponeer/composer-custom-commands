@@ -67,21 +67,11 @@ final class DataCache
 	{
 		$all_reflection_classes = [];
 		foreach ($classes as $class) {
-			foreach ($this->getParentClassesAndInterfaces($class) as $name => $reflection_class) {
+			foreach ($this->getFilesForClasses($class) as $name => $reflection_class) {
 				$all_reflection_classes[$name] = $reflection_class;
 			}
 		}
 		return $all_reflection_classes;
-	}
-
-	/**
-	 * Read commands data from cache
-	 *
-	 * @return array|mixed
-	 */
-	public function read()
-	{
-		return file_exists($this->cache_file) ? include($this->cache_file) : array();
 	}
 
 	/**
@@ -111,6 +101,16 @@ final class DataCache
 		$ret[$class->getName()] = $class->getFileName();
 
 		return $ret;
+	}
+
+	/**
+	 * Read commands data from cache
+	 *
+	 * @return array|mixed
+	 */
+	public function read()
+	{
+		return file_exists($this->cache_file) ? include($this->cache_file) : array();
 	}
 
 }
