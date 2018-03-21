@@ -9,8 +9,7 @@ use ReflectionClass;
  *
  * @package Imponeer\ComposerCustomCommands
  */
-final class DataCache
-{
+final class DataCache {
 
 	/**
 	 * Cache file
@@ -22,8 +21,7 @@ final class DataCache
 	/**
 	 * DataCache constructor.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->cache_file = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'commands.php';
 	}
 
@@ -32,8 +30,7 @@ final class DataCache
 	 *
 	 * @return DataCache
 	 */
-	public static function getInstance()
-	{
+	public static function getInstance() {
 		return new self();
 	}
 
@@ -42,11 +39,10 @@ final class DataCache
 	 *
 	 * @param array $classes Classes list
 	 */
-	public function write(array $classes)
-	{
+	public function write(array $classes) {
 		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
-		$includes = empty($classes) ? array() : $this->getReflectionClassesFromStrings($classes);
+		$includes = empty($classes)?array():$this->getReflectionClassesFromStrings($classes);
 
 		ob_start();
 		require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'commands.tpl.php';
@@ -63,8 +59,7 @@ final class DataCache
 	 *
 	 * @return array
 	 */
-	private function getReflectionClassesFromStrings(array $classes)
-	{
+	private function getReflectionClassesFromStrings(array $classes) {
 		$all_reflection_classes = [];
 		foreach ($classes as $class) {
 			foreach ($this->getFilesForClasses(new ReflectionClass($class)) as $name => $reflection_class) {
@@ -79,8 +74,7 @@ final class DataCache
 	 *
 	 * @param ReflectionClass $class
 	 */
-	private function getFilesForClasses(ReflectionClass $class)
-	{
+	private function getFilesForClasses(ReflectionClass $class) {
 		$ret = [];
 		foreach ($class->getInterfaces() as $interface) {
 			foreach ($this->getFilesForClasses($interface) as $class2 => $file) {
@@ -110,7 +104,7 @@ final class DataCache
 	 */
 	public function read()
 	{
-		return file_exists($this->cache_file) ? include($this->cache_file) : array();
+		return file_exists($this->cache_file)?include($this->cache_file):array();
 	}
 
 }
