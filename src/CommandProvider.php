@@ -33,7 +33,7 @@ class CommandProvider implements CommandProviderCapability
 	 */
 	protected function getLoader()
 	{
-		$loader_file = $this->getComposer()->get('vendor-dir') . DIRECTORY_SEPARATOR . 'autoload.php';
+		$loader_file = $this->getComposer()->getConfig()->get('vendor-dir') . DIRECTORY_SEPARATOR . 'autoload.php';
 		if (file_exists($loader_file)) {
 			return require_once($loader_file);
 		}
