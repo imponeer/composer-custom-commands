@@ -71,9 +71,10 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	{
 		$composer = $event->getComposer();
 		$extra = $composer->getPackage()->getExtra();
-		if (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands'])) {
-			$event->getIO()->write('<info>Updating commands cache</info>');
-			DataCache::getInstance()->write($extra[self::CONFIG_NAMESPACE]['commands']);
-		}
+
+		$event->getIO()->write('<info>Updating commands cache</info>');
+		$commands = (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands'])) ? $extra[self::CONFIG_NAMESPACE]['commands'] : array();
+
+		DataCache::getInstance()->write($commands);
 	}
 }
