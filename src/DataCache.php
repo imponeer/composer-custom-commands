@@ -66,7 +66,7 @@ final class DataCache
 	 */
 	public function read()
 	{
-		if (file_exists($this->path)) {
+		if (!file_exists($this->path)) {
 			return array();
 		}
 		return include($this->path);
