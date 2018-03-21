@@ -29,12 +29,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Composer\Command\BaseCommand;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Your new command
  */
-class DummyCommand extends BaseCommand
+class DummyCommand extends Command
 {
 
 	/**
@@ -83,7 +83,7 @@ This should look something like this:
 			"My\\": "src/"
 		}
 	},
-	"config": {
+	"extra": {
 		"commands": [
 			"My\\Commands\\DummyCommand"
 		]
