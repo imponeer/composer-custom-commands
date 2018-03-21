@@ -9,15 +9,13 @@ use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class CommandProvider implements CommandProviderCapability
-{
+class CommandProvider implements CommandProviderCapability {
 	/**
 	 * Gets registered commands
 	 *
 	 * @return array
 	 */
-	public function getCommands()
-	{
+	public function getCommands() {
 		return ProxyCommand::produce(
 			DataCache::getInstance()->read()
 		);
