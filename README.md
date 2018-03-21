@@ -60,7 +60,7 @@ class DummyCommand extends Command
 }
 ```
 
-### 3. Create or edit config section in projects composer.json and add there section `commands` with PHP class names of commands that should be added to composer
+### 3. Create or edit config section in projects composer.json and add there section `custom-commands` with `commands` key and add there PHP class names of commands that should be added to composer
 
 This should look something like this:
 ```javascript
@@ -84,9 +84,45 @@ This should look something like this:
 		}
 	},
 	"extra": {
-		"commands": [
-			"My\\Commands\\DummyCommand"
-		]
+		"custom-commands": {
+			"commands": [
+				"My\\Commands\\DummyCommand"
+			]
+		}
+	}
+}
+```
+
+If you need that some script should be executed before every command (f.e. you need to define some constants), you can add there `boot` key with value that is filename relative from place where composer.json is. 
+
+In that case your composer.json should look similar to this:
+```javascript
+{
+	"name": "my-project",
+	"description": "",
+	"type": "project",
+	"require": {
+		"imponeer/composer-custom-commands": "*"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "SomeBody SomeOne",
+			"email": "internet@is.ours.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"My\\": "src/"
+		}
+	},
+	"extra": {
+		"custom-commands": {
+			"commands": [
+				"My\\Commands\\DummyCommand"
+			],
+			"boot": "boot.php"
+		}
 	}
 }
 ```
