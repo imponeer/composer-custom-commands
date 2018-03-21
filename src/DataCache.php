@@ -13,18 +13,18 @@ final class DataCache
 {
 
 	/**
-	 * Cache path
+	 * Cache file
 	 *
 	 * @var string
 	 */
-	private $path;
+	private $cache_file;
 
 	/**
 	 * DataCache constructor.
 	 */
 	public function __construct()
 	{
-		$this->path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'commands.php';
+		$this->cache_file = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'commands.php';
 	}
 
 	/**
@@ -46,21 +46,32 @@ final class DataCache
 	{
 		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
-		$includes = array();
-		$instances = array();
-		foreach ($classes as $class) {
-			$reflector = new ReflectionClass($class);
-			$includes[] = 'include_once ' . var_export($reflector->getFileName(), true) . ';';
-			$instances[] = 'ProxyCommand::create(new ' . $class . '())';
-		}
-		$output = '<' . '?php' . PHP_EOL;
-		$output .= 'use Imponeer\\ComposerCustomCommands\\ProxyCommand;' . PHP_EOL;
-		$output .= implode(PHP_EOL, $includes) . PHP_EOL;
-		$output .= 'return array(' . PHP_EOL;
-		$output .= "\t" . implode(',' . PHP_EOL . "\t", $instances) . PHP_EOL;
-		$output .= ');';
+		$includes = $this->getReflectionClassesFromStrings($classes);
 
-		file_put_contents($this->path, $output, LOCK_EX);
+		ob_start();
+		require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'commands.tpl.php';
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		file_put_contents($this->cache_file, $output, LOCK_EX);
+	}
+
+	/**
+	 * Gets reflection classes list from strings
+	 *
+	 * @param array $classes
+	 *
+	 * @return array
+	 */
+	private function getReflectionClassesFromStrings(array $classes)
+	{
+		$all_reflection_classes = [];
+		foreach ($classes as $class) {
+			foreach ($this->getParentClassesAndInterfaces($class) as $name => $reflection_class) {
+				$all_reflection_classes[$name] = $reflection_class;
+			}
+		}
+		return $all_reflection_classes;
 	}
 
 	/**
@@ -70,10 +81,36 @@ final class DataCache
 	 */
 	public function read()
 	{
-		if (!file_exists($this->path)) {
-			return array();
+		return file_exists($this->cache_file) ? include($this->cache_file) : array();
+	}
+
+	/**
+	 * Gets parent classes and interfaces
+	 *
+	 * @param ReflectionClass $class
+	 */
+	private function getFilesForClasses(ReflectionClass $class)
+	{
+		$ret = [];
+		foreach ($class->getInterfaces() as $interface) {
+			foreach ($this->getFilesForClasses($interface) as $class2 => $file) {
+				$ret[$class2] = $file;
+			}
+			$ret[$interface->getName()] = $interface->getFileName();
 		}
-		return include($this->path);
+		foreach ($class->getTraits() as $another_class) {
+			$ret[$another_class->getName()] = $another_class->getFileName();
+		}
+		$parent = $class->getParentClass();
+		if ($parent) {
+			foreach ($this->getFilesForClasses($parent) as $class2 => $file) {
+				$ret[$class2] = $file;
+			}
+			$ret[$parent->getName()] = $parent->getFileName();
+		}
+		$ret[$class->getName()] = $class->getFileName();
+
+		return $ret;
 	}
 
 }
