@@ -3,6 +3,7 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Command\BaseCommand;
+use Composer\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -73,17 +74,19 @@ class ProxyCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$this->includeAutoloader();
+
+		$composer = $this->getComposer();
+
+		require_once $composer->getConfig()->get('vendor-dir') . DIRECTORY_SEPARATOR . 'autoload.php';
+
+		$_SERVER['HTTP_HOST'] = null;
+
+		$extra = $composer->getPackage()->getExtra();
+		if (isset($extra[Plugin::CONFIG_NAMESPACE]['boot'])) {
+			require_once dirname(Factory::getComposerFile()) . DIRECTORY_SEPARATOR . $extra[Plugin::CONFIG_NAMESPACE]['boot'];
+		}
 
 		return $this->command->execute($input, $output);
-	}
-
-	/**
-	 * Includes autoloader
-	 */
-	private function includeAutoloader()
-	{
-		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 	}
 
 }

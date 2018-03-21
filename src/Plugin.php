@@ -11,7 +11,6 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
-use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 
 /**
  * Defines plugin
@@ -20,6 +19,11 @@ use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException
  */
 class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 {
+
+	/**
+	 * Place where in extras all config variables are stored
+	 */
+	const CONFIG_NAMESPACE = 'custom-commands';
 
 	/**
 	 * Gets all subscribed events for plugin
@@ -67,7 +71,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	{
 		$composer = $event->getComposer();
 		$extra = $composer->getPackage()->getExtra();
-		if (isset($extra['commands'])) {
+		if (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands'])) {
 			$event->getIO()->write('<info>Updating commands cache</info>');
 			DataCache::getInstance()->write($extra['commands']);
 		}
