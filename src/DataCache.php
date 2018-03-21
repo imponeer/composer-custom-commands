@@ -42,6 +42,8 @@ final class DataCache
 	 */
 	public function write(array $classes)
 	{
+		require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
+
 		$includes = array();
 		$instances = array();
 		foreach ($classes as $class) {
