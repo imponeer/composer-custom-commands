@@ -10,8 +10,8 @@ use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
+use Imponeer\ComposerCustomCommands\Exceptions\CommandsConfigIsNotArrayException;
 
 /**
  * Defines plugin
@@ -68,7 +68,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 		$composer = $event->getComposer();
 		$extra = $composer->getPackage()->getExtra();
 		if (isset($extra['commands'])) {
-			$event->getIO()->write('<info>Updating commands cache...</info>');
+			$event->getIO()->write('<info>Updating commands cache</info>');
 			DataCache::getInstance()->write($extra['commands']);
 		}
 	}
