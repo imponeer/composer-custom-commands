@@ -18,6 +18,8 @@ class CommandProvider implements CommandProviderCapability
      */
 	public function getCommands()
 	{
-		return DataCache::getInstance()->read();
+		return ProxyCommand::produce(
+			DataCache::getInstance()->read()
+		);
     }
 }

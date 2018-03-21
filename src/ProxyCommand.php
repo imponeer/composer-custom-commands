@@ -18,6 +18,27 @@ class ProxyCommand extends BaseCommand
 	protected $command = null;
 
 	/**
+	 * Produce array of classes that exists
+	 *
+	 * @param string[] $classes Creates classes instances
+	 *
+	 * @return array
+	 */
+	public static function produce($classes)
+	{
+		$ret = [];
+		foreach ($classes as $class) {
+			if (!class_exists($classes)) {
+				continue;
+			}
+			$ret[] = self::create(
+				new $class()
+			);
+		}
+		return $ret;
+	}
+
+	/**
 	 * Creates new instance
 	 *
 	 * @param Command $command Command instance

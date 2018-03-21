@@ -49,7 +49,7 @@ final class DataCache
 		$includes = $this->getReflectionClassesFromStrings($classes);
 
 		ob_start();
-		require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'commands.tpl.php';
+		require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'commands.tpl.php';
 		$output = ob_get_contents();
 		ob_end_clean();
 
@@ -67,7 +67,7 @@ final class DataCache
 	{
 		$all_reflection_classes = [];
 		foreach ($classes as $class) {
-			foreach ($this->getFilesForClasses($class) as $name => $reflection_class) {
+			foreach ($this->getFilesForClasses(new ReflectionClass($class)) as $name => $reflection_class) {
 				$all_reflection_classes[$name] = $reflection_class;
 			}
 		}
