@@ -30,8 +30,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	 *
 	 * @return array
 	 */
-	public static function getSubscribedEvents()
-	{
+	public static function getSubscribedEvents() {
 		return array(
 			ScriptEvents::POST_AUTOLOAD_DUMP => array('onPostAutoloadDump', 0)
 		);
@@ -43,8 +42,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	 * @param Composer $composer Composer instance
 	 * @param IOInterface $io IO interface
 	 */
-	public function activate(Composer $composer, IOInterface $io)
-	{
+	public function activate(Composer $composer, IOInterface $io) {
 
 	}
 
@@ -53,8 +51,7 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	 *
 	 * @return array
 	 */
-	public function getCapabilities()
-	{
+	public function getCapabilities() {
 		return array(
 			CommandProvider::class => LocalCommandProvider::class
 		);
@@ -67,13 +64,12 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	 *
 	 * @throws CommandsConfigIsNotArrayException
 	 */
-	public function onPostAutoloadDump(Event $event)
-	{
+	public function onPostAutoloadDump(Event $event) {
 		$composer = $event->getComposer();
 		$extra = $composer->getPackage()->getExtra();
 
 		$event->getIO()->write('<info>Updating commands cache</info>');
-		$commands = (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands'])) ? $extra[self::CONFIG_NAMESPACE]['commands'] : array();
+		$commands = (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands']))?$extra[self::CONFIG_NAMESPACE]['commands']:array();
 
 		DataCache::getInstance()->write($commands);
 	}
