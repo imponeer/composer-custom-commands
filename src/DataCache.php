@@ -2,6 +2,8 @@
 
 namespace Imponeer\ComposerCustomCommands;
 
+use ReflectionClass;
+
 /**
  * Caches commands information
  *
@@ -42,7 +44,7 @@ final class DataCache
 	 */
 	public function write(array $classes)
 	{
-		require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
+		require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 		$includes = array();
 		$instances = array();
@@ -53,9 +55,9 @@ final class DataCache
 		}
 		$output = '<' . '?php' . PHP_EOL;
 		$output .= 'use Imponeer\\ComposerCustomCommands\\ProxyCommand;' . PHP_EOL;
-		$output .= implode(PHP_EOL, $includes);
+		$output .= implode(PHP_EOL, $includes) . PHP_EOL;
 		$output .= 'return array(' . PHP_EOL;
-		$output .= "\t" . implode(',' . PHP_EOL . "\t", $instances);
+		$output .= "\t" . implode(',' . PHP_EOL . "\t", $instances) . PHP_EOL;
 		$output .= ');';
 
 		file_put_contents($this->path, $output, LOCK_EX);
