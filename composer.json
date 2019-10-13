@@ -4,8 +4,8 @@
     "type": "composer-plugin",
     "require": {
         "composer-plugin-api": "^1.1",
-		"php": ">=5.5",
-		"symfony/console": "^4.1",
+		"php": ">=7.2",
+		"symfony/console": "*",
 		"imponeer/project-cached-code-generator-from-composer.json-data-base": "^0.1.1"
     },
     "license": "MIT",
