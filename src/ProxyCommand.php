@@ -3,7 +3,6 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Command\BaseCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,33 +18,22 @@ class ProxyCommand extends BaseCommand
 	/**
 	 * Linked command
 	 *
-	 * @var null|Command
+	 * @var string
 	 */
-	protected $realCommand = null;
+	protected $realCommandClass;
 
 	/**
-	 * ProxyCommand constructor.
+	 * Set real command class
 	 *
-	 * @param string $composerCommandClass Composer command class
+	 * @param string $command Command to set
+	 *
+	 * @return $this
 	 */
-	public function __construct($composerCommandClass)
+	public function setRealCommandClass(string $command)
 	{
-		$this->realCommand = new $composerCommandClass();
+		$this->realCommandClass = $command;
 
-		$this
-			->setAliases(
-				$this->realCommand->getAliases()
-			)
-			->setDescription(
-				$this->realCommand->getDescription()
-			)
-			->setDefinition(
-				$this->realCommand->getDefinition()
-			);
-
-		parent::__construct(
-			$this->realCommand->getName()
-		);
+		return $this;
 	}
 
 	/**
@@ -60,13 +48,16 @@ class ProxyCommand extends BaseCommand
 	{
 		require_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "autoload.php");
 
-		foreach (DumpReader::create()->getBootScripts() as $something) {
+		foreach (DumpReader::getInstance()->getBootScripts() as $something) {
 			require_once $something;
 		}
 
 		$_SERVER['HTTP_HOST'] = null;
 
-		return $this->realCommand->execute($input, $output);
+		$class = $this->realCommandClass;
+		$instance = new $class();
+
+		return $instance->execute($input, $output);
 	}
 
 }

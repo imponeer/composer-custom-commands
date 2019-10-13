@@ -11,16 +11,21 @@ class DumpReader
 {
 
 	/**
+	 * Prevents autoload.php from automatic inclusion
+	 *
+	 * @var bool
+	 */
+	public $preventAutoloadFromInclusion = false;
+	/**
 	 * Scripts to include before commands execution
 	 *
 	 * @var string[]
 	 */
 	protected $boot = [];
-
 	/**
 	 * Commands classes
 	 *
-	 * @var string[]
+	 * @var ProxyCommand[]
 	 */
 	protected $commands = [];
 
@@ -43,7 +48,7 @@ class DumpReader
 	 *
 	 * @return DumpReader
 	 */
-	static public function create(): DumpReader
+	static public function getInstance(): DumpReader
 	{
 		static $instance = null;
 		if ($instance === null) {
@@ -57,11 +62,11 @@ class DumpReader
 	/**
 	 * Get command classes list
 	 *
-	 * @return \string[]
+	 * @return ProxyCommand[]
 	 */
 	public function getCommands(): array
 	{
-		return array_filter($this->commands, 'class_exists');
+		return $this->commands;
 	}
 
 	/**

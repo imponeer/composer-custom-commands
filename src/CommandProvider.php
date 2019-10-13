@@ -16,11 +16,6 @@ class CommandProvider implements CommandProviderCapability {
 	 * @return array
 	 */
 	public function getCommands() {
-		return array_map(
-			static function ($class) {
-				return new ProxyCommand($class);
-			},
-			DumpReader::create()->getCommands()
-		);
+		return DumpReader::getInstance()->getCommands();
 	}
 }

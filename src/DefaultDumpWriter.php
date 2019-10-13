@@ -45,7 +45,45 @@ class DefaultDumpWriter implements DumpWriterInterface
 	 */
 	public function writeToFile(): bool
 	{
-		$ret = '<?php return ' . var_export(['commands' => $this->commands, 'boot' => $this->boot], true) . ';';
+		require_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "autoload.php");
+
+		$commands_str = '';
+		foreach ($this->commands as $command) {
+			if (!class_exists($command)) {
+				continue;
+			}
+			$realCommand = new $command();
+			$instance = (
+			new ProxyCommand(
+				$realCommand->getName()
+			)
+			)
+				->setAliases(
+					$realCommand->getAliases()
+				)
+				->setDescription(
+					$realCommand->getDescription()
+				)
+				->setDefinition(
+					$realCommand->getDefinition()
+				)
+				->setRealCommandClass(
+					$command
+				);
+			$commands_str .= '		unserialize(' . var_export(serialize($instance), true) . '),' . PHP_EOL;
+		}
+
+		$boot = var_export($this->boot, true);
+
+		$ret = <<<EOF
+<?php
+return [
+	'boot' => $boot,
+	'commands' => [
+$commands_str
+	]
+];
+EOF;
 
 		return (bool)file_put_contents($this->filename, $ret, LOCK_EX);
 	}
