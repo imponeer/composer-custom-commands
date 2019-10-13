@@ -58,6 +58,11 @@ class ProxyCommand extends BaseCommand
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
+		require_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "autoload.php");
+
+		foreach (require (dirname(__DIR__) . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR . 'data.php')['boot'] as $something) {
+			require_once $something;
+		}
 
 		$_SERVER['HTTP_HOST'] = null;
 
