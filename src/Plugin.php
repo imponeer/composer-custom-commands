@@ -2,49 +2,17 @@
 
 namespace Imponeer\ComposerCustomCommands;
 
-use Composer\Composer;
-use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
-use Composer\Plugin\Capable;
-use Composer\Plugin\PluginInterface;
-use Composer\Script\Event;
-use Composer\Script\ScriptEvents;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
+use Imponeer\ProjectCachedCodeGeneratorFromComposerJSONDataBase\ComposerPlugin;
 
 /**
  * Defines plugin
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin implements PluginInterface, Capable, EventSubscriberInterface
+class Plugin extends ComposerPlugin
 {
-
-	/**
-	 * Place where in extras all config variables are stored
-	 */
-	const CONFIG_NAMESPACE = 'custom-commands';
-
-	/**
-	 * Gets all subscribed events for plugin
-	 *
-	 * @return array
-	 */
-	public static function getSubscribedEvents() {
-		return array(
-			ScriptEvents::POST_AUTOLOAD_DUMP => array('onPostAutoloadDump', 0)
-		);
-	}
-
-	/**
-	 * Method executed when activating plugin
-	 *
-	 * @param Composer $composer Composer instance
-	 * @param IOInterface $io IO interface
-	 */
-	public function activate(Composer $composer, IOInterface $io) {
-
-	}
 
 	/**
 	 * Gets capabilities of object
@@ -58,19 +26,42 @@ class Plugin implements PluginInterface, Capable, EventSubscriberInterface
 	}
 
 	/**
-	 * Using post autodump event to create cached version of commands
+	 * Gets dump writer factory class
 	 *
-	 * @param Event $event
-	 *
-	 * @throws CommandsConfigIsNotArrayException
+	 * @return string
 	 */
-	public function onPostAutoloadDump(Event $event) {
-		$composer = $event->getComposer();
-		$extra = $composer->getPackage()->getExtra();
+	protected function getDumpWriterFactoryClass(): string
+	{
+		return DumpWriterFactory::class;
+	}
 
-		$event->getIO()->write('<info>Updating commands cache</info>');
-		$commands = (isset($extra[self::CONFIG_NAMESPACE]) && isset($extra[self::CONFIG_NAMESPACE]['commands']))?$extra[self::CONFIG_NAMESPACE]['commands']:array();
+	/**
+	 * Get message when can't create dump writer instance
+	 *
+	 * @return string
+	 */
+	protected function getCannotCreateDumpWriterInstanceMessage(): string
+	{
+		return 'No commands definitions found in your composer.json project definitions';
+	}
 
-		DataCache::getInstance()->write($commands);
+	/**
+	 * Get message when updating cache
+	 *
+	 * @return string
+	 */
+	protected function getUpdatingCacheMessage(): string
+	{
+		return 'Updating commands cache';
+	}
+
+	/**
+	 * Get message when can't write cache file
+	 *
+	 * @return string
+	 */
+	protected function getFailToWriteDumpMessage(): string
+	{
+		return 'Failed to update commands cache';
 	}
 }

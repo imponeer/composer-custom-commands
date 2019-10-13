@@ -16,8 +16,11 @@ class CommandProvider implements CommandProviderCapability {
 	 * @return array
 	 */
 	public function getCommands() {
-		return ProxyCommand::produce(
-			DataCache::getInstance()->read()
-		);
+		$file = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR . 'data.php';
+		$commands = [];
+		if (file_exists($file)) {
+			$commands = include($file);
+		}
+		return $commands;
 	}
 }
