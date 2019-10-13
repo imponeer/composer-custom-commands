@@ -45,8 +45,7 @@ class DefaultDumpWriter implements DumpWriterInterface
 	 */
 	public function writeToFile(): bool
 	{
-		$ret = $this->source . PHP_EOL;
-		$ret .= '<?php return ' . var_export(['commands' => $this->commands, 'boot' => $this->boot], true) . ';';
+		$ret = '<?php return ' . var_export(['commands' => $this->commands, 'boot' => $this->boot], true) . ';';
 
 		return (bool)file_put_contents($this->filename, $ret, LOCK_EX);
 	}
