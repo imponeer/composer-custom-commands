@@ -16,13 +16,11 @@ class CommandProvider implements CommandProviderCapability {
 	 * @return array
 	 */
 	public function getCommands() {
-		$file = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR . 'data.php';
-		$commands = file_exists($file) ? include($file) : [];
 		return array_map(
 			static function ($class) {
 				return new ProxyCommand($class);
 			},
-			array_filter($commands, 'class_exists')
+			DumpReader::create()->getCommands()
 		);
 	}
 }
