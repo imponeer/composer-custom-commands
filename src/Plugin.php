@@ -3,6 +3,7 @@
 namespace Imponeer\ComposerCustomCommands;
 
 use Composer\Plugin\Capability\CommandProvider;
+use Composer\Plugin\Capable;
 use Imponeer\ComposerCustomCommands\CommandProvider as LocalCommandProvider;
 use Imponeer\ProjectCachedCodeGeneratorFromComposerJSONDataBase\ComposerPlugin;
 
@@ -11,7 +12,7 @@ use Imponeer\ProjectCachedCodeGeneratorFromComposerJSONDataBase\ComposerPlugin;
  *
  * @package Imponeer\ComposerCustomCommand
  */
-class Plugin extends ComposerPlugin
+class Plugin extends ComposerPlugin implements Capable
 {
 
 	/**
@@ -20,9 +21,9 @@ class Plugin extends ComposerPlugin
 	 * @return array
 	 */
 	public function getCapabilities() {
-		return array(
+		return [
 			CommandProvider::class => LocalCommandProvider::class
-		);
+		];
 	}
 
 	/**

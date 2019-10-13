@@ -37,7 +37,7 @@ class DefaultDumpWriter implements DumpWriterInterface
 	{
 		$this->filename = $filename;
 		$this->source = sprintf(
-			'<?php%1$srequire_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "autoload.php");%1$s$_SERVER[\'HTTP_HOST\'] = null;%1$s',
+			'<?php%1$suse Imponeer\\ComposerCustomCommands\\ProxyCommand;%1$s%1$srequire_once(dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . "autoload.php");%1$s',
 			PHP_EOL
 		);
 	}
@@ -49,11 +49,12 @@ class DefaultDumpWriter implements DumpWriterInterface
 	 */
 	public function writeToFile(): bool
 	{
-		$ret = $this->source . PHP_EOL . 'return [' . PHP_EOL;
+		$ret = $this->source . PHP_EOL;
+		$ret .= '$commands = array_filter([' . PHP_EOL;
 		foreach ($this->commands as $command) {
-			$ret .= str_repeat(' ', 4) . ' new ' . $command . '(),' . PHP_EOL;
+			$ret .= str_repeat(' ', 4) . 'class_exists("' . $command . '") ? ' . ' new ProxyCommand(' . $command . '::class) : null,' . PHP_EOL;
 		}
-		$ret .= '];';
+		$ret .= ']);' . PHP_EOL;
 
 		return (bool)file_put_contents($this->filename, $ret, LOCK_EX);
 	}
@@ -76,7 +77,7 @@ class DefaultDumpWriter implements DumpWriterInterface
 	public function addBootScript(string $bootScript): void
 	{
 		$this->source .= sprintf(
-			'file_exists(%1$s) && include_once(%1$s);%2$s',
+			'try {%2$s    file_exists(%1$s) && include_once(%1$s);%2$s} catch (\\Exception $ex) {%2$s}%2$s',
 			json_encode($bootScript),
 			PHP_EOL
 		);
