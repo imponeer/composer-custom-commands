@@ -22,7 +22,7 @@ class CommandProvider implements CommandProviderCapability {
 			static function ($class) {
 				return new ProxyCommand($class);
 			},
-			array_filter('class_exists', $commands)
+			array_filter($commands, 'class_exists')
 		);
 	}
 }
