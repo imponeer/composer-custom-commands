@@ -17,10 +17,10 @@ class CommandProvider implements CommandProviderCapability {
 	 */
 	public function getCommands() {
 		$file = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR . 'data.php';
-		$commands = [];
-		if (file_exists($file)) {
-			$commands = include($file);
+		$commands = file_exists($file) ? include($file) : [];
+		if (is_array($commands) === false) {
+			$commands = [];
 		}
-		return $commands;
+		return array_filter((array)$commands);
 	}
 }

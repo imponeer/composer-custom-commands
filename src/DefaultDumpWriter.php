@@ -50,11 +50,11 @@ class DefaultDumpWriter implements DumpWriterInterface
 	public function writeToFile(): bool
 	{
 		$ret = $this->source . PHP_EOL;
-		$ret .= '$commands = array_filter([' . PHP_EOL;
+		$ret .= 'return [' . PHP_EOL;
 		foreach ($this->commands as $command) {
-			$ret .= str_repeat(' ', 4) . 'class_exists("' . $command . '") ? ' . ' new ProxyCommand(' . $command . '::class) : null,' . PHP_EOL;
+			$ret .= str_repeat(' ', 4) . 'class_exists(' . json_encode($command) . ') ? ' . ' new ProxyCommand(' . $command . '::class) : null,' . PHP_EOL;
 		}
-		$ret .= ']);' . PHP_EOL;
+		$ret .= '];' . PHP_EOL;
 
 		return (bool)file_put_contents($this->filename, $ret, LOCK_EX);
 	}

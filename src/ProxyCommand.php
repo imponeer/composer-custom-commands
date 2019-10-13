@@ -24,18 +24,21 @@ class ProxyCommand extends BaseCommand
 	 */
 	public function __construct($composerCommandClass)
 	{
-		parent::__construct(null);
-
 		$this->realCommand = new $composerCommandClass();
 
-		$this->setAliases(
-			$this->realCommand->getAliases()
-		);
-		$this->setDescription(
-			$this->realCommand->getDescription()
-		);
-		$this->setDefinition(
-			$this->realCommand->getDefinition()
+		$this
+			->setAliases(
+				$this->realCommand->getAliases()
+			)
+			->setDescription(
+				$this->realCommand->getDescription()
+			)
+			->setDefinition(
+				$this->realCommand->getDefinition()
+			);
+
+		parent::__construct(
+			$this->realCommand->getName()
 		);
 	}
 
